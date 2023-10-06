@@ -1,10 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   web:
     build: web
-    depends_on:
-      - db
     container_name: misp_web
     image: misp:latest
     restart: unless-stopped
@@ -26,19 +24,5 @@ services:
       - TIMEZONE=${TIMEZONE:-UTC}
     entrypoint: "wait-for-it.sh -t 0 -h ${MYSQL_HOST:-misp_db} -p 3306 -- /run.sh"
 
-  db:
-    container_name: misp_db
-    image: mysql/mysql-server:5.7
-    hostname: ${MYSQL_HOST:-misp_db}
-    restart: unless-stopped
-    volumes:
-      - ${DATA_DIR:-./data}/db:/var/lib/mysql
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-misp}
-      - MYSQL_USER=${MYSQL_USER:-misp}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-misp}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-misp}
-
 volumes:
   web:
-  db:
